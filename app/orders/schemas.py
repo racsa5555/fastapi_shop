@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 class SOrderItemCreate(BaseModel):
     product:int
-    quantity:int
+    quantity:Optional[int] = 1
 
     class Config:
         from_attributes = True

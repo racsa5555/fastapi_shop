@@ -28,11 +28,15 @@ async def get_product_by_id(id:int,db:AsyncSession):
 
 
 async def check_and_set_quantity_product(products:List,quantitys:List,db:AsyncSession):
-    for index,product in enumerate(products):
-        if product.quantity < quantitys[index]:
-            raise HTTPException(detail=f'Продукт {product.title} закончился на складе',status_code= status.HTTP_404_NOT_FOUND)
-    for index,product in enumerate(products):
-        new_quantity = product.quantity-quantitys[index]
+    print(quantitys)
+    products_copy = products[:]
+    quantitys_copy = quantitys[:]
+    for index,product in enumerate(products_copy):
+        if product.quantity < quantitys_copy[index]:
+            raise HTTPException(detail=f'Продукт {products_copy.title} закончился на складе',status_code= status.HTTP_404_NOT_FOUND)
+    for index,product in enumerate(products_copy):
+        new_quantity = product.quantity-quantitys_copy[index]
+        # new_quantity = products_copy.quantity - (quantitys_copy[index] if quantitys_copy[index] is not None else 1)
         await set_model_column_new_value_by_id(product.id,Products,{'quantity':new_quantity},db)
     return True
 
@@ -50,7 +54,7 @@ async def get_products(db:AsyncSession,title:str = None,category_id:int = None):
     products = result.scalars().all()
     return [SProduct.model_validate(row,from_attributes=True) for row in products]
 
-async def get_products_by_ids(ids:List[int],db:AsyncSession):
+async def   get_products_by_ids(ids:List[int],db:AsyncSession):
     res = []
     for id in ids:
         res.append(await get_product_by_id(id,db))

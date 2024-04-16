@@ -28,7 +28,7 @@ psql <user>;
 CREATE DATABASE <db_name>;
 ```
 4. Создайте .env файл. Пример:
-   MODE=DEV
+MODE=DEV
 
 DB_USER=...
 DB_PASS=...

@@ -14,6 +14,8 @@ from app.users.schemas import SUserCreate,SUserCreateResponse, SUserGet
 from .hashing import Hasher
 
 
+
+
 async def create_user(user: SUserCreate,db:AsyncSession):
     async with db:
         db_user = Users(first_name = user.first_name,last_name = user.last_name,email = user.email,password = Hasher.get_password_hash(user.password),role = 'user')

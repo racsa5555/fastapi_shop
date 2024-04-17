@@ -16,7 +16,7 @@ class SUserCreateResponse(BaseModel):
 
 class SUserLogin(BaseModel):
     email: str
-    password:str
+    password: str
 
 class SUserGet(BaseModel):
     first_name:str

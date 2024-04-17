@@ -1,21 +1,19 @@
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import AsyncSession,create_async_engine
 from sqlalchemy.orm import DeclarativeBase,sessionmaker
 
-from decouple import config
+from app.config import settings
 
 
-DB_PORT = config('DB_PORT')
-DB_HOST = config('DB_HOST')
-DB_NAME = config('DB_NAME')
-DB_USER = config('DB_USER')
-DB_PASS = config('DB_PASS')
-
-
-
-DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+if settings.MODE == "TEST":
+    DATABASE_URL = settings.get_test_database_url()
+    DATABASE_PARAMS = {"poolclass":NullPool}
+else:
+    DATABASE_URL = settings.get_database_url()
+    DATABASE_PARAMS = {}
 
 engine = create_async_engine(
-    DATABASE_URL
+    DATABASE_URL,**DATABASE_PARAMS
 )
 async_session_maker = sessionmaker(expire_on_commit=False,class_=AsyncSession,bind=engine)
 

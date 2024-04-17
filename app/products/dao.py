@@ -28,7 +28,6 @@ async def get_product_by_id(id:int,db:AsyncSession):
 
 
 async def check_and_set_quantity_product(products:List,quantitys:List,db:AsyncSession):
-    print(quantitys)
     products_copy = products[:]
     quantitys_copy = quantitys[:]
     for index,product in enumerate(products_copy):
@@ -36,7 +35,6 @@ async def check_and_set_quantity_product(products:List,quantitys:List,db:AsyncSe
             raise HTTPException(detail=f'Продукт {products_copy.title} закончился на складе',status_code= status.HTTP_404_NOT_FOUND)
     for index,product in enumerate(products_copy):
         new_quantity = product.quantity-quantitys_copy[index]
-        # new_quantity = products_copy.quantity - (quantitys_copy[index] if quantitys_copy[index] is not None else 1)
         await set_model_column_new_value_by_id(product.id,Products,{'quantity':new_quantity},db)
     return True
 

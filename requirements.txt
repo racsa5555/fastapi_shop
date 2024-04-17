@@ -9,3 +9,5 @@ bcrypt
 passlib
 python-jose
 python-multipart
+pytest
+pydantic-settings
